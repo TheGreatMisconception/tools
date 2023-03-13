@@ -20,7 +20,8 @@ compileMT="cmake . -DRUN_IN_PLACE=TRUE"
 while getopts ":SCsc:" opt; do
     case $opt in 
         S)
-            compileMT="cmake . -DBUILD_SERVER=TRUE -DBUILD_CLIENT=FALSE -DIRRLICHT_INCLUDE_DIR=/some/where/irrlichtmt/include";;
+            echo "compiling server only"
+            compileMT="cmake . -DBUILD_SERVER=TRUE -DBUILD_CLIENT=FALSE -DIRRLICHT_INCLUDE_DIR=minetest*/lib/irrlichtmt/include";;
         s)
             echo "Compile Minetest on Debian based systems"
             echo
@@ -52,6 +53,7 @@ main() {
     else
         download
         compile
+        clean
     fi
 }
 
@@ -60,6 +62,14 @@ install_package() {
     echo "installing package: $1"
     # Only redirect stdout to /dev/null - Errors will still be shown
     apt-get install $1 -y -q 1> /dev/null
+}
+
+# Correct the permissions of the install directory
+clean() {
+    cd ../
+    chown -R $SUDO_USER:$SUDO_USER minetest*
+    echo 
+    echo "Done"
 }
 
 compile() {
@@ -81,7 +91,7 @@ compile() {
     done
     # Compile minetest
     $compileMT
-    make -j\$("$cores")
+    make -j$($cores)
 }
 
 download() {
@@ -114,7 +124,7 @@ download() {
     # Download the source code with wget or git
     case $Method in
         git)
-            echo "using git to clone $MTsource into `pwd`"
+            echo "using git to clone $GITMTsource into `pwd`"
             git clone --depth 1 $GITMTsource &> /dev/null
             cd minetest
             git clone --depth 1 $GITIrrlichtsource lib/irrlichtmt;;
