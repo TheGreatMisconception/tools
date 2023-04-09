@@ -15,6 +15,7 @@ A Bash script that I wrote, to automate the compilation for Minetest on Debian b
 | -S |  build only minetestserver|
 |-s| prints the link to this Github repository|
 |-c [int]| specify the amount of cores used for the compilation, otherwise amount of available threads/cores is used
+|-h| outputs a simple help dialog
 
 # License
 

@@ -15,9 +15,24 @@ cores="nproc"
 compileMT="cmake . -DRUN_IN_PLACE=TRUE"
 
 
+function MThelp() {
+    echo "Compile Minetest on Debian based systems"
+    echo
+    echo "Syntax: $0 [-V|-S|-s|-c|-h]"
+    echo "Note: This script needs to be executed as root!"
+    echo
+    echo "options:"
+    echo "-S     Only compile server binary"
+    echo "-s     prints the corresponding Github Repository"
+    echo "-c     specify the amount of cores to be used for the compilation"
+    echo "-h     output this help dialog"
+    echo
+    echo "Licensed under MIT - TheGreatMisconception 2023"
+}
+
 
 # Parse arguments
-while getopts ":SCsc:" opt; do
+while getopts ":SCsc:h" opt; do
     case $opt in 
         S)
             echo "compiling server only"
@@ -25,25 +40,15 @@ while getopts ":SCsc:" opt; do
         s)
             echo "Compile Minetest on Debian based systems"
             echo
-            echo "https://github.com/thegreatmisconception" && exit;;
+            echo "https://github.com/thegreatmisconception/tools" && exit;;
         c)
-            cores="$OPTARG"
+            cores="$OPTARG";;
+        h)
+            MThelp
+            exit
     esac
 done
 
-
-function help() {
-    echo "Compile Minetest on Debian based systems"
-    echo
-    echo "Syntax: $0 [-V|-S|-s|-c]"
-    echo
-    echo "options:"
-    echo "S     Only compile server binary"
-    echo "s     prints the corresponding Github Repository"
-    echo "c     specify the amount of cores to be used for the compilation"
-    echo
-    echo "Licensed under MIT - TheGreatMisconception 2023"
-}
 
 main() {
     # Check if script is being executed as superuser
